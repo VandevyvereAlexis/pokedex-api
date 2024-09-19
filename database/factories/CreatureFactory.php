@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Race;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,7 +26,10 @@ class CreatureFactory extends Factory
             'def' => random_int(0, 100),
             'speed' => random_int(0, 100),
             'capture_rate' => random_int(0, 100),
-            'user_id' => random_int(1, User::count())
+            'user_id' => rand(1, User::count()),
+            'type_id' => rand(1, Type::count()),
+            'race_id' => rand(1, Race::count()),
+            'image' => 'default.jpg',
         ];
     }
 }
