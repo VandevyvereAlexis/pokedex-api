@@ -17,9 +17,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'pseudo',
         'email',
         'password',
+        'image',
+        'role_id',
     ];
 
     /**
@@ -43,5 +45,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relation avec Role (user appartient à un rôle)
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    // Relation avec Creature (un utilisateur peut avoir plusieurs créatures)
+    public function creatures()
+    {
+        return $this->hasMany(Creature::class);
     }
 }
