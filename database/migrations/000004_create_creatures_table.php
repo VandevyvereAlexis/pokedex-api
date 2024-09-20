@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('creatures', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image')->default('default.jpg');
+            $table->string('name', 25)->unique();
+            $table->string('image', 100)->default('default.jpg');
             $table->integer('pv');
             $table->integer('atk');
             $table->integer('def');
