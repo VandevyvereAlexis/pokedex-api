@@ -20,40 +20,16 @@ class UserController extends Controller
     */
     public function index(): JsonResponse
     {
-        try {
+        $users = User::paginate(10);
+        $message = $users->isEmpty() ? 'Aucun user trouvée' : 'Users récupérés avec succès';
+        $data = $users->isEmpty() ? [] : $users->items();
 
-            $users = User::paginate(10);
-
-            // Si aucun user
-            if ($users->isEmpty()) {
-                return response()->json([
-                    'status'     => true,
-                    'message'    => 'Aucun user trouvé',
-                    'data'       => [],
-                    'pagination' => $this->formatPagination($users),
-                ], 200);
-            }
-
-            // Si des users
-            return response()->json([
-                'status'     => true,
-                'message'    => 'Users récupérés avec succès',
-                'data'       => $users->items(),
-                'pagination' => $this->formatPagination($users),
-            ], 200);
-
-        } catch (\Exception $error) {
-
-            // Problème
-            return response()->json([
-                'status'  => false,
-                'message' => 'Erreur lors de la récupération des users',
-                'error'   => $error->getMessage(),
-            ], 500);
-
-        }
-        // $users = User::paginate(10);
-        // return response()->json($users, 200);
+        return response()->json([
+            'status'     => true,
+            'message'    => $message,
+            'data'       => $data,
+            'pagination' => $this->formatPagination($users),
+        ]);
     }
 
 

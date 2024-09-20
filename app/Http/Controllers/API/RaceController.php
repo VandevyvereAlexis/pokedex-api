@@ -20,40 +20,16 @@ class RaceController extends Controller
     */
     public function index(): JsonResponse
     {
-        try {
+        $races = Race::paginate(10);
+        $message = $races->isEmpty() ? 'Aucune race trouvée' : 'Races récupérées avec succès';
+        $data = $races->isEmpty() ? [] : $races->items();
 
-            $races = Race::paginate(10);
-
-            // Si aucune race
-            if ($races->isEmpty()) {
-                return response()->json([
-                    'status'     => true,
-                    'message'    => 'Aucune race trouvée',
-                    'data'       => [],
-                    'pagination' => $this->formatPagination($races),
-                ], 200);
-            }
-
-            // Si des races
-            return response()->json([
-                'status'     => true,
-                'message'    => 'Races récupérées avec succès',
-                'data'       => $races->items(),
-                'pagination' => $this->formatPagination($races),
-            ], 200);
-
-        } catch (\Exception $error) {
-
-            // Problème
-            return response()->json([
-                'status'  => false,
-                'message' => 'Erreur lors de la récupération des races',
-                'error'   => $error->getMessage(),
-            ], 500);
-
-        }
-        // $races = Race::paginate(10);
-        // return response()->json($races, 200);
+        return response()->json([
+            'status'     => true,
+            'message'    => $message,
+            'data'       => $data,
+            'pagination' => $this->formatPagination($races),
+        ]);
     }
 
 

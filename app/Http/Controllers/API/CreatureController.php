@@ -19,41 +19,16 @@ class CreatureController extends Controller
     */
     public function index(): JsonResponse
     {
+        $creatures = Creature::with(['type', 'race'])->paginate(10);
+        $message = $creatures->isEmpty() ? 'Aucune créature trouvée' : 'Créatures récupérées avec succès';
+        $data = $creatures->isEmpty() ? [] : $creatures->items();
 
-        try {
-
-            $creatures = Creature::with(['type', 'race'])->paginate(10);
-
-            // Si aucune créature
-            if ($creatures->isEmpty()) {
-                return response()->json([
-                    'status'     => true,
-                    'message'    => 'Aucune créature trouvée',
-                    'data'       => [],
-                    'pagination' => $this->formatPagination($creatures),
-                ], 200);
-            }
-
-            // Si des créatures
-            return response()->json([
-                'status'     => true,
-                'message'    => 'Créatures récupérées avec succès',
-                'data'       => $creatures->items(),
-                'pagination' => $this->formatPagination($creatures),
-            ], 200);
-
-        } catch (\Exception $error) {
-
-            // Problème
-            return response()->json([
-                'status'  => false,
-                'message' => 'Erreur lors de la récupération des créatures',
-                'error'   => $error->getMessage(),
-            ], 500);
-
-        }
-        // $creatures = Creature::paginate(10);
-        // return response()->json($creatures);
+        return response()->json([
+            'status'     => true,
+            'message'    => $message,
+            'data'       => $data,
+            'pagination' => $this->formatPagination($creatures),
+        ]);
     }
 
 
@@ -65,10 +40,31 @@ class CreatureController extends Controller
     |   STORE   (Creation)                                                     |
     |--------------------------------------------------------------------------|
     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // public function store(StoreCreatureRequest $request): JsonResponse
+    // {
+    //     // $creatures = Creature::create([
+    //     //     'name'         =>
+    //     //     'pv'           =>
+    //     //     'atk'          =>
+    //     //     'def'          =>
+    //     //     'speed'        =>
+    //     //     'capture_rate' =>
+    //     //     'image'        => isset($request['image']) ? uploadImage($request['image']) : 'user.png',
+    //     //     'user_id'      => Auth::user()->id,
+    //     //     'user_id'      => Auth::user()->id,
+    //     //     'user_id' => Auth::user()->id,
+    //     // ]);
+
+    //     return response()->json([
+    //         'status'  => true,
+    //         'message' => 'Post créé avec succès',
+    //         'post'    => $post,
+    //     ], 201);
+    // }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|

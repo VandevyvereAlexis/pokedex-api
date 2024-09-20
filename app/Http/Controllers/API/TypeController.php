@@ -20,40 +20,16 @@ class TypeController extends Controller
     */
     public function index(): JsonResponse
     {
-        try {
+        $types = Type::paginate(10);
+        $message = $types->isEmpty() ? 'Aucun type trouvée' : 'Types récupérés avec succès';
+        $data = $types->isEmpty() ? [] : $types->items();
 
-            $types = Type::paginate(10);
-
-            // Si aucun type
-            if ($types->isEmpty()) {
-                return response()->json([
-                    'status'     => true,
-                    'message'    => 'Aucun type trouvé',
-                    'data'       => [],
-                    'pagination' => $this->formatPagination($types),
-                ], 200);
-            }
-
-            // Si des types
-            return response()->json([
-                'status'     => true,
-                'message'    => 'Types récupérés avec succès',
-                'data'       => $types->items(),
-                'pagination' => $this->formatPagination($types),
-            ], 200);
-
-        } catch (\Exception $error) {
-
-            // Problème
-            return response()->json([
-                'status'  => false,
-                'message' => 'Erreur lors de la récupération des types',
-                'error'   => $error->getMessage(),
-            ], 500);
-
-        }
-        // $types = Type::paginate(10);
-        // return response()->json($types, 200);
+        return response()->json([
+            'status'     => true,
+            'message'    => $message,
+            'data'       => $data,
+            'pagination' => $this->formatPagination($types),
+        ]);
     }
 
 
