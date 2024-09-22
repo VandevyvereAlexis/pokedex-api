@@ -20,7 +20,7 @@ class CreatureFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => substr(fake()->name(), 3, 25),
             'pv' => random_int(0, 100),
             'atk' => random_int(0, 100),
             'def' => random_int(0, 100),
