@@ -16,7 +16,7 @@ class RaceController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   INDEX   (List)                                                         |
+    |   INDEX | GET                                                            |
     |--------------------------------------------------------------------------|
     */
     public function index(): JsonResponse
@@ -39,7 +39,7 @@ class RaceController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   STORE   (Creation)                                                     |
+    |   STORE | POST                                                           |
     |--------------------------------------------------------------------------|
     */
     public function store(StoreRaceRequest $request): JsonResponse
@@ -62,13 +62,30 @@ class RaceController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   SHOW   (Display)                                                       |
+    |   SHOW | GET                                                             |
     |--------------------------------------------------------------------------|
     */
-    public function show(race $race)
+    public function show($id)
     {
-        //
+        $race = Race::find($id);
+
+        if ($race) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'Race trouvée avec succès',
+                'data'     => $race,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucune race trouvée',
+        ], 404);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|

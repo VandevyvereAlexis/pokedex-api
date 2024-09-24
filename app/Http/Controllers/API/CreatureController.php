@@ -15,12 +15,12 @@ class CreatureController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   INDEX   (List)                                                         |
+    |   INDEX | GET                                                            |
     |--------------------------------------------------------------------------|
     */
     public function index(): JsonResponse
     {
-        $creatures = Creature::with(['type', 'race'])->paginate(10);
+        $creatures = Creature::with(['type', 'race', 'user'])->paginate(10);
 
         $message = $creatures->isEmpty() ? 'Aucune créature trouvée' : 'Créatures récupérées avec succès';
         $data = $creatures->isEmpty() ? [] : $creatures->items();
@@ -39,7 +39,7 @@ class CreatureController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   STORE   (Creation)                                                     |
+    |   STORE | POST                                                           |
     |--------------------------------------------------------------------------|
     */
     public function store(StoreCreatureRequest $request): JsonResponse
@@ -66,17 +66,34 @@ class CreatureController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   SHOW   (Display)                                                       |
+    |   SHOW | GET                                                             |
     |--------------------------------------------------------------------------|
     */
-    public function show(Creature $creature)
+    public function show($id)
     {
-        //
+        $creature = Creature::with(['user', 'race', 'type'])->find($id);
+
+        if ($creature) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'Créature trouvée avec succès',
+                'data'     => $creature,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucune créature trouvée',
+        ], 404);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|
-    |   UPDATE   (Update)                                                      |
+    |   STORE | POST                                                           |
     |--------------------------------------------------------------------------|
     */
     public function update(Request $request, Creature $creature)

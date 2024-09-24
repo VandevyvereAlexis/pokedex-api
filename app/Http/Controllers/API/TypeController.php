@@ -16,7 +16,7 @@ class TypeController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   INDEX   (List)                                                         |
+    |   INDEX | GET                                                            |
     |--------------------------------------------------------------------------|
     */
     public function index(): JsonResponse
@@ -39,7 +39,7 @@ class TypeController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   STORE   (Creation)                                                     |
+    |   STORE | POST                                                           |
     |--------------------------------------------------------------------------|
     */
     public function store(StoreTypeRequest $request): JsonResponse
@@ -62,13 +62,30 @@ class TypeController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   SHOW   (Display)                                                       |
+    |   SHOW | GET                                                             |
     |--------------------------------------------------------------------------|
     */
-    public function show(Type $type)
+    public function show($id)
     {
-        //
+        $type = Type::find($id);
+
+        if ($type) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'Type trouvé avec succès',
+                'data'     => $type,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucun type trouvée',
+        ], 404);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|

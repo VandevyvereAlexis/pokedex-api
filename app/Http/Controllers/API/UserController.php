@@ -17,12 +17,12 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   INDEX   (List)                                                         |
+    |   INDEX | GET                                                            |
     |--------------------------------------------------------------------------|
     */
     public function index(): JsonResponse
     {
-        $users = User::paginate(10);
+        $users = User::with(['creatures'])->paginate(10);
         $message = $users->isEmpty() ? 'Aucun user trouvée' : 'Users récupérés avec succès';
         $data = $users->isEmpty() ? [] : $users->items();
 
@@ -40,7 +40,7 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   STORE   (Creation)                                                     |
+    |   STORE | POST                                                           |
     |--------------------------------------------------------------------------|
     */
     public function store(StoreUserRequest $request)
@@ -67,13 +67,30 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   SHOW   (Display)                                                       |
+    |   SHOW | GET                                                             |
     |--------------------------------------------------------------------------|
     */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $user = User::with(['creatures'])->find($id);
+
+        if ($user) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'User trouvé avec succès',
+                'data'     => $user,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucun user trouvé',
+        ], 404);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|
