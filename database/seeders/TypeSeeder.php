@@ -13,16 +13,8 @@ class TypeSeeder extends Seeder
      */
     public function run(): void
     {
-        Type::create([
-            'name' => 'Paladin'
-        ]);
-
-        Type::create([
-            'name' => 'Guerrier'
-        ]);
-
-        Type::create([
-            'name' => 'Chaman'
-        ]);
+        Type::create(['name' => 'Paladin']);
+        Type::create(['name' => 'Guerrier']);
+        Type::create(['name' => 'Chaman']);
     }
 }

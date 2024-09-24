@@ -13,16 +13,8 @@ class RaceSeeder extends Seeder
      */
     public function run(): void
     {
-        Race::create([
-            'name' => 'Humain'
-        ]);
-
-        Race::create([
-            'name' => 'Orc'
-        ]);
-
-        Race::create([
-            'name' => 'Tauren'
-        ]);
+        Race::create(['name' => 'Humain']);
+        Race::create(['name' => 'Orc']);
+        Race::create(['name' => 'Tauren']);
     }
 }
