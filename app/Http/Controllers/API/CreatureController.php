@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCreatureRequest;
 use App\Models\Creature;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class CreatureController extends Controller
     public function index(): JsonResponse
     {
         $creatures = Creature::with(['type', 'race'])->paginate(10);
+
         $message = $creatures->isEmpty() ? 'Aucune créature trouvée' : 'Créatures récupérées avec succès';
         $data = $creatures->isEmpty() ? [] : $creatures->items();
 
@@ -40,27 +42,23 @@ class CreatureController extends Controller
     |   STORE   (Creation)                                                     |
     |--------------------------------------------------------------------------|
     */
-    // public function store(StoreCreatureRequest $request): JsonResponse
-    // {
-    //     // $creatures = Creature::create([
-    //     //     'name'         =>
-    //     //     'pv'           =>
-    //     //     'atk'          =>
-    //     //     'def'          =>
-    //     //     'speed'        =>
-    //     //     'capture_rate' =>
-    //     //     'image'        => isset($request['image']) ? uploadImage($request['image']) : 'user.png',
-    //     //     'user_id'      => Auth::user()->id,
-    //     //     'user_id'      => Auth::user()->id,
-    //     //     'user_id' => Auth::user()->id,
-    //     // ]);
+    public function store(StoreCreatureRequest $request): JsonResponse
+    {
+        $imageName = $request->hasFile('image') ? uploadImage($request->file('image')) : 'default.jpg';
 
-    //     return response()->json([
-    //         'status'  => true,
-    //         'message' => 'Post créé avec succès',
-    //         'post'    => $post,
-    //     ], 201);
-    // }
+        $creatureData = $request->only(['name', 'pv', 'atk', 'def', 'speed', 'capture_rate', 'user_id', 'type', 'race']);
+        $creatureData['image'] = $imageName;
+        $creatureData['type_id'] = $request->type;
+        $creatureData['race_id'] = $request->race;
+
+        $creature = Creature::create($creatureData);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Créature créée avec succès',
+            'data'    => $creature,
+        ], 201);
+    }
 
 
 

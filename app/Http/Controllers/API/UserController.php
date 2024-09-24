@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Traits\ControllerUtils;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -41,10 +43,27 @@ class UserController extends Controller
     |   STORE   (Creation)                                                     |
     |--------------------------------------------------------------------------|
     */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $imageName = $request->hasFile('image') ? uploadImage($request->file('image')) : 'default.jpg';
+
+        $user = User::create([
+            'pseudo'   => $request['pseudo'],
+            'email'    => $request['email'],
+            'password' => Hash::make($request['password']),
+            'image'    => $imageName,
+        ]);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Utilisateur créé avec succès.',
+            'data'    => $user,
+        ], 201);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|

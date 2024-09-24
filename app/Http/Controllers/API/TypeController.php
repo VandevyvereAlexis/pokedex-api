@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTypeRequest;
 use App\Models\Type;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,10 +42,23 @@ class TypeController extends Controller
     |   STORE   (Creation)                                                     |
     |--------------------------------------------------------------------------|
     */
-    public function store(Request $request)
+    public function store(StoreTypeRequest $request): JsonResponse
     {
-        //
+        $type = Type::create([
+            'name' => $request->input('name'),
+        ]);
+
+        // Réponse JSON après création
+        return response()->json([
+            'status'  => true,
+            'message' => 'Type créé avec succès.',
+            'data'    => $type,
+        ], 201);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|
