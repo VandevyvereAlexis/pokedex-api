@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRaceRequest;
+use App\Http\Requests\UpdateRaceRequest;
 use App\Models\race;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -65,7 +66,7 @@ class RaceController extends Controller
     |   SHOW | GET                                                             |
     |--------------------------------------------------------------------------|
     */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $race = Race::find($id);
 
@@ -89,13 +90,23 @@ class RaceController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   UPDATE   (Update)                                                      |
+    |   UPDATE | PUT / PATCH                                                   |
     |--------------------------------------------------------------------------|
     */
-    public function update(Request $request, race $race)
+    public function update(UpdateRaceRequest $request, race $race): JsonResponse
     {
-        //
+        $race->update($request->only(['name']));
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Race mise à jour avec succès',
+            'data'    => $race,
+        ]);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|

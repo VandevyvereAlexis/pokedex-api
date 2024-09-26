@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTypeRequest;
+use App\Http\Requests\UpdateTypeRequest;
 use App\Models\Type;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -65,7 +66,7 @@ class TypeController extends Controller
     |   SHOW | GET                                                             |
     |--------------------------------------------------------------------------|
     */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $type = Type::find($id);
 
@@ -89,13 +90,23 @@ class TypeController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   UPDATE   (Update)                                                      |
+    |   UPDATE | PUT / PATCH                                                   |
     |--------------------------------------------------------------------------|
     */
-    public function update(Request $request, Type $type)
+    public function update(UpdateTypeRequest $request, Type $type): JsonResponse
     {
-        //
+        $type->update($request->only(['name']));
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Type mise à jour avec succès',
+            'data'    => $type,
+        ]);
     }
+
+
+
+
 
     /*
     |--------------------------------------------------------------------------|

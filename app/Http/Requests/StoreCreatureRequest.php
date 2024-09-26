@@ -22,7 +22,7 @@ class StoreCreatureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'         => 'required|string|alpha_dash|min:3|max:25|unique:creatures',
+            'name'         => 'required|string|alpha_dash|min:3|max:25|unique:creatures,name',
             'pv'           => 'required|integer|max:100',
             'atk'          => 'required|integer|max:100',
             'def'          => 'required|integer|max:100',

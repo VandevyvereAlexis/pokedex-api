@@ -24,6 +24,8 @@ foreach ($resources as $resource => $controller) {
     Route::apiResource($resource, $controller);
 }
 
+// Modification Password
+Route::put('users/{user}/password', [App\Http\Controllers\API\UserController::class, 'updatePassword'])->name('users.updatePassword');
 
 /*
 |--------------------------------------------------------------------------|
