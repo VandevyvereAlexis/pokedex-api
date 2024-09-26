@@ -110,11 +110,16 @@ class RaceController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   DESTROY   (Deletion)                                                   |
+    |   DESTROY | DELETE                                                       |
     |--------------------------------------------------------------------------|
     */
-    public function destroy(race $race)
+    public function destroy(Race $race): JsonResponse
     {
-        //
+        $race->delete();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Race supprimé avec succès',
+        ]);
     }
 }

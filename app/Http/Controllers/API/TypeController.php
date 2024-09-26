@@ -113,8 +113,13 @@ class TypeController extends Controller
     |   DESTROY   (Deletion)                                                   |
     |--------------------------------------------------------------------------|
     */
-    public function destroy(Type $type)
+    public function destroy(Type $type): JsonResponse
     {
-        //
+        $type->delete();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Type supprimé avec succès',
+        ]);
     }
 }

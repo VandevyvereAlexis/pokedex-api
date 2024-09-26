@@ -173,8 +173,20 @@ class UserController extends Controller
     |   DESTROY   (Deletion)                                                   |
     |--------------------------------------------------------------------------|
     */
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
-        //
+        if ($user->image !== 'default.jpg') {
+            $imagePath = 'images/' . $user->image;
+            if (File::exists(public_path($imagePath))) {
+                File::delete(public_path($imagePath));
+            }
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Utilisateur supprimé avec succès',
+        ]);
     }
 }

@@ -127,11 +127,23 @@ class CreatureController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   DESTROY   (Deletion)                                                   |
+    |   DESTROY | DELETE                                                       |
     |--------------------------------------------------------------------------|
     */
-    public function destroy(Creature $creature)
+    public function destroy(Creature $creature): JsonResponse
     {
-        //
+        if ($creature->image !== 'default.jpg') {
+            $imagePath = 'images/' . $creature->image;
+            if (File::exists(public_path($imagePath))) {
+                File::delete(public_path($imagePath));
+            }
+        }
+
+        $creature->delete();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Créature supprimée avec succès',
+        ]);
     }
 }
