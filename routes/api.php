@@ -8,11 +8,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-/*
-|--------------------------------------------------------------------------|
-|   Configuration Dynamique des Routes API                                 |
-|--------------------------------------------------------------------------|
-*/
+
 $resources = [
     'creatures' => App\Http\Controllers\API\CreatureController::class,
     'races' => App\Http\Controllers\API\RaceController::class,
@@ -24,14 +20,19 @@ foreach ($resources as $resource => $controller) {
     Route::apiResource($resource, $controller);
 }
 
+
+
 // Modification Password
 Route::put('users/{user}/password', [App\Http\Controllers\API\UserController::class, 'updatePassword'])->name('users.updatePassword');
 
-/*
-|--------------------------------------------------------------------------|
-|   Définition Manuelle des Routes API                                     |
-|--------------------------------------------------------------------------|
-*/
+// Connexion / Déconnexion
+Route::post('login', [App\Http\Controllers\API\LoginController::class, 'login'])->name('login');
+Route::post('logout', [App\Http\Controllers\API\LoginController::class, 'logout'])->name('logout')->middleware('auth:web');
+
+
+
+
+// Définition Manuelle des Routes :
 // Route::apiResource("creatures", App\Http\Controllers\API\CreatureController::class);
 // Route::apiResource("races", App\Http\Controllers\API\RaceController::class);
 // Route::apiResource("types", App\Http\Controllers\API\TypeController::class);

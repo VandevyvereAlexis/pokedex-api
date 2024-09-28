@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use App\Models\Login;
+use App\Models\User;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+
+class LoginController extends Controller
+{
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $dataUser = $request->only(['email', 'password']);
+
+        if (Auth::attempt($dataUser)) {
+
+            $authUser = User::find(Auth::user()->id)->load('role');
+            return response()->json([$authUser, 'Vous êtes connecté']);
+
+        } else {
+            return response()->json(['Echec de la connexion.', 'errors' => 'L\'utilisateur n\'existe pas ou le mot de passe est incorrect']);
+        }
+    }
+
+
+
+
+
+
+
+    public function logout(Request $request): JsonResponse
+    {
+        Auth::guard('web')->logout();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Déconnexion réussie'
+        ]);
+    }
+}
