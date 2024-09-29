@@ -12,6 +12,26 @@ use Illuminate\Http\JsonResponse;
 
 class LoginController extends Controller
 {
+
+    /*
+    |--------------------------------------------------------------------------|
+    |   __CONSTRUC   middleware                                                |
+    |--------------------------------------------------------------------------|
+    */
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except('login');
+    }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------|
+    |   LOGIN | POST                                                           |
+    |--------------------------------------------------------------------------|
+    */
     public function login(LoginRequest $request): JsonResponse
     {
         $dataUser = $request->only(['email', 'password']);
@@ -30,8 +50,11 @@ class LoginController extends Controller
 
 
 
-
-
+    /*
+    |--------------------------------------------------------------------------|
+    |   LOGOUT | POST                                                          |
+    |--------------------------------------------------------------------------|
+    */
     public function logout(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
