@@ -25,10 +25,19 @@ foreach ($resources as $resource => $controller) {
 // Modification Password
 Route::put('users/{user}/password', [App\Http\Controllers\API\UserController::class, 'updatePassword'])->name('users.updatePassword');
 
-// Connexion / Déconnexion
+
+
+// Connexion | Déconnexion
 Route::post('login', [App\Http\Controllers\API\LoginController::class, 'login'])->name('login');
 Route::post('logout', [App\Http\Controllers\API\LoginController::class, 'logout'])->name('logout')->middleware('auth:web');
 
+
+
+// Search
+Route::get('/creature/search', [App\Http\Controllers\API\CreatureController::class, 'search'])->name('creatures.search');
+Route::get('/race/search', [App\Http\Controllers\API\RaceController::class, 'search'])->name('races.search');
+Route::get('/type/search', [App\Http\Controllers\API\TypeController::class, 'search'])->name('types.search');
+Route::get('/user/search', [App\Http\Controllers\API\UserController::class, 'search'])->name('users.search');
 
 
 

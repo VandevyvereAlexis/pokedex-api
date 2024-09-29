@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Creature::class);
     }
+
+    public static function searchByPseudo(string $name)
+    {
+        return self::where('pseudo', 'like', "%$name%");
+    }
 }

@@ -22,7 +22,7 @@ class CreatureController extends Controller
     */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except('index, show');
+        $this->middleware('auth:sanctum')->except('index, show, search');
     }
 
 
@@ -159,5 +159,33 @@ class CreatureController extends Controller
             'status'  => true,
             'message' => 'Créature supprimée avec succès',
         ]);
+    }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------|
+    |   SEARCH | GET                                                           |
+    |--------------------------------------------------------------------------|
+    */
+    public function search(Request $request): JsonResponse
+    {
+        $name = $request->query('name');
+        $creatures = Creature::searchByName($name)->with(['user', 'type', 'race'])->get();
+
+        if ($creatures->isNotEmpty()) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'Créature(s) trouvée(s) avec succès',
+                'data'     => $creatures,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucune créature trouvée',
+        ], 404);
     }
 }

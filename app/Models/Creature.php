@@ -23,20 +23,22 @@ class Creature extends Model
     ];
 
     // Relation avec User (une créature appartient à un utilisateur)
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
     // Relation avec Type (une créature a un type)
-    public function type()
-    {
+    public function type() {
         return $this->belongsTo(Type::class);
     }
 
     // Relation avec Race (une créature a une race)
-    public function race()
-    {
+    public function race() {
         return $this->belongsTo(Race::class);
     }
+
+    public static function searchByName(string $name) {
+        return self::where('name', 'like', "%$name%");
+    }
 }
+

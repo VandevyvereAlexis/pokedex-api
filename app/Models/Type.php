@@ -18,4 +18,9 @@ class Type extends Model
     {
         return $this->hasMany(Creature::class);
     }
+
+    public static function searchByName(string $name)
+    {
+        return self::where('name', 'like', "%$name%");
+    }
 }

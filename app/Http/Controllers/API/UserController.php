@@ -25,7 +25,7 @@ class UserController extends Controller
     */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except('store');
+        $this->middleware('auth:sanctum')->except('store, search');
     }
 
 
@@ -202,5 +202,33 @@ class UserController extends Controller
             'status'  => true,
             'message' => 'Utilisateur supprimé avec succès',
         ]);
+    }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------|
+    |   SEARCH | GET                                                           |
+    |--------------------------------------------------------------------------|
+    */
+    public function search(Request $request): JsonResponse
+    {
+        $pseudo = $request->query('pseudo');
+        $users = User::searchByPseudo($pseudo)->with(['creatures'])->get();
+
+        if ($users->isNotEmpty()) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'Utilisateur(s) trouvé(s) avec succès',
+                'data'     => $users,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucun utilisateur trouvé',
+        ], 404);
     }
 }

@@ -12,8 +12,11 @@ class Race extends Model
     protected $fillable = ['name'];
 
     // Relation avec Creature (une race peut avoir plusieurs créatures)
-    public function creatures()
-    {
+    public function creatures() {
         return $this->hasMany(Creature::class);
+    }
+
+    public static function searchByName(string $name) {
+        return self::where('name', 'like', "%$name%");
     }
 }

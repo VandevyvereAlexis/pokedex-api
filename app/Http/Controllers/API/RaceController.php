@@ -22,7 +22,7 @@ class RaceController extends Controller
     */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except('index, show');
+        $this->middleware('auth:sanctum')->except('index, show, search');
     }
 
 
@@ -135,5 +135,33 @@ class RaceController extends Controller
             'status'  => true,
             'message' => 'Race supprimé avec succès',
         ]);
+    }
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------|
+    |   SEARCH | GET                                                           |
+    |--------------------------------------------------------------------------|
+    */
+    public function search(Request $request): JsonResponse
+    {
+        $name = $request->query('name');
+        $races = Race::searchByName($name)->get();
+
+        if ($races->isNotEmpty()) {
+            return response()->json([
+                'status'   => true,
+                'message'  => 'Race(s) trouvée(s) avec succès',
+                'data'     => $races,
+            ]);
+        }
+
+        return response()->json([
+            'status'  => false,
+            'message' => 'Aucune race trouvée',
+        ], 404);
     }
 }
