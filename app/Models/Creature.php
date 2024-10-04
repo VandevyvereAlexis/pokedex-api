@@ -37,10 +37,6 @@ class Creature extends Model
         return $this->belongsTo(Race::class);
     }
 
-    // public static function searchByName(string $name) {
-    //     return self::where('name', 'like', "%$name%");
-    // }
-
     public static function searchByName(string $name = null, string $minPv = null, string $maxPv = null)
     {
         $query = self::query();
