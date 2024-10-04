@@ -37,8 +37,27 @@ class Creature extends Model
         return $this->belongsTo(Race::class);
     }
 
-    public static function searchByName(string $name) {
-        return self::where('name', 'like', "%$name%");
+    // public static function searchByName(string $name) {
+    //     return self::where('name', 'like', "%$name%");
+    // }
+
+    public static function searchByName(string $name = null, string $minPv = null, string $maxPv = null)
+    {
+        $query = self::query();
+
+        if ($name) {
+            $query->where('name', 'like', "%$name%");
+        }
+
+        if (is_numeric($minPv)) {
+            $query->where('pv', '>', $minPv);
+        }
+
+        if (is_numeric($maxPv)) {
+            $query->where('pv', '<', $maxPv);
+        }
+
+        return $query;
     }
 }
 

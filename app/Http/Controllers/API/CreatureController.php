@@ -173,7 +173,12 @@ class CreatureController extends Controller
     public function search(Request $request): JsonResponse
     {
         $name = $request->query('name');
-        $creatures = Creature::searchByName($name)->with(['user', 'type', 'race'])->get();
+        $minPv = $request->query('minPv');
+        $maxPv = $request->query('maxPv');
+
+        $creatures = Creature::searchByName($name, $minPv, $maxPv)
+            ->with(['user', 'type', 'race'])
+            ->get();
 
         if ($creatures->isNotEmpty()) {
             return response()->json([
