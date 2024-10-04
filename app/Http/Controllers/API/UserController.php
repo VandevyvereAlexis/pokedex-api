@@ -184,7 +184,7 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   DESTROY   (Deletion)                                                   |
+    |   DESTROY | DELETE                                                       |
     |--------------------------------------------------------------------------|
     */
     public function destroy(User $user): JsonResponse

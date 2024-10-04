@@ -124,7 +124,7 @@ class TypeController extends Controller
 
     /*
     |--------------------------------------------------------------------------|
-    |   DESTROY   (Deletion)                                                   |
+    |   DESTROY | DELETE                                                       |
     |--------------------------------------------------------------------------|
     */
     public function destroy(Type $type): JsonResponse
