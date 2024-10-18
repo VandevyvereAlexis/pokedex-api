@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Login;
-use App\Models\User;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use App\Models\User;
+use App\Http\Requests\LoginRequest;
 
 class LoginController extends Controller
 {
