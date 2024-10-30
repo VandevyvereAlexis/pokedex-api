@@ -36,13 +36,19 @@ class LoginController extends Controller
         $dataUser = $request->only(['email', 'password']);
 
         if (Auth::attempt($dataUser)) {
+            $authUser = User::with('role')->find(Auth::id());
 
-            $authUser = User::find(Auth::user()->id)->load('role');
-            return response()->json([$authUser, 'Vous êtes connecté']);
-
-        } else {
-            return response()->json(['Echec de la connexion.', 'errors' => 'L\'utilisateur n\'existe pas ou le mot de passe est incorrect']);
+            return response()->json([
+                'status' => true,
+                'user' => $authUser,
+                'message' => 'Vous êtes connecté'
+            ]);
         }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Échec de la connexion. Utilisateur ou mot de passe incorrect.'
+        ], 401);
     }
 
 
