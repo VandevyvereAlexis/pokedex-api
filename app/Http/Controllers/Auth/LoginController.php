@@ -19,7 +19,7 @@ class LoginController extends Controller
     */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except('login');
+        $this->middleware('auth:sanctum')->except(['login']);
     }
 
 

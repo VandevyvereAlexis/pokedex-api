@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
-        $middleware->append(StartSession::class);
+
+        // Désactivation de StartSession pour éviter les conflits de session avec Sanctum dans les requêtes API. Utiliser pour les application web tradtionnel sans api
+        // $middleware->append(StartSession::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
