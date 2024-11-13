@@ -36,6 +36,8 @@ class CreatureController extends Controller
     */
     public function index(): JsonResponse
     {
+        $this->authorize('index', Creature::class);
+
         $creatures = Creature::with(['type', 'race', 'user'])->paginate(10);
 
         $message = $creatures->isEmpty() ? 'Aucune créature trouvée' : 'Créatures récupérées avec succès';
@@ -60,6 +62,8 @@ class CreatureController extends Controller
     */
     public function store(StoreCreatureRequest $request): JsonResponse
     {
+        $this->authorize('store', Creature::class);
+
         $imageName = $request->hasFile('image') ? uploadImage($request->file('image')) : 'default.jpg';
 
         $creatureData = $request->only(['name', 'pv', 'atk', 'def', 'speed', 'capture_rate', 'user_id', 'type', 'race']);
@@ -87,6 +91,8 @@ class CreatureController extends Controller
     */
     public function show($id): JsonResponse
     {
+        $this->authorize('show', Creature::class);
+
         $creature = Creature::with(['user', 'race', 'type'])->find($id);
 
         if ($creature) {
@@ -114,6 +120,8 @@ class CreatureController extends Controller
     */
     public function update(UpdateCreatureRequest $request, Creature $creature): JsonResponse
     {
+        $this->authorize('update', $creature);
+
         $creature->update($request->only(['name', 'pv', 'atk', 'def', 'speed', 'capture_rate', 'type_id', 'race_id']));
 
         if ($request->image) {
@@ -146,6 +154,8 @@ class CreatureController extends Controller
     */
     public function destroy(Creature $creature): JsonResponse
     {
+        $this->authorize('destroy', $creature);
+
         if ($creature->image !== 'default.jpg') {
             $imagePath = 'images/' . $creature->image;
             if (File::exists(public_path($imagePath))) {
