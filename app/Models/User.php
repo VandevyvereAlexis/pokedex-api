@@ -59,6 +59,12 @@ class User extends Authenticatable
         return $this->hasMany(Creature::class);
     }
 
+    // Méthode pour vérifier si l'utilisateur est admin
+    public function isAdmin(): bool
+    {
+        return $this->role && $this->role->role === 'admin';
+    }
+
     public static function searchByPseudo(string $name)
     {
         return self::where('pseudo', 'like', "%$name%");
